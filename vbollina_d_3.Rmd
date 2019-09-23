@@ -1,0 +1,34 @@
+---
+title: "weiglet dual solution"
+output: html_document
+---
+```{r}
+#Duality theory
+library(lpSolveAPI)
+lprec<-make.lp(9,11)
+lp.control(lprec,sense='min')
+set.objfn(lprec,c(750,900,450,13000,12000,5000,900,1200,750,0,0)) # Objective function
+set.row(lprec,1,c(1,20,1,900,450),indices = c(1,4,9,10,11))
+set.row(lprec,2,c(1,15,1,900,450),indices = c(1,4,8,10,11))
+set.row(lprec,3,c(1,12,1,900,450),indices = c(1,4,7,10,11))
+set.row(lprec,4,c(1,20,1,-750),indices = c(2,5,9,10))
+set.row(lprec,5,c(1,15,1,-750),indices = c(2,5,8,10))
+set.row(lprec,6,c(1,12,1,-750),indices = c(2,5,7,10))
+set.row(lprec,7,c(1,20,1,-750),indices = c(3,6,9,11))
+set.row(lprec,8,c(1,15,1,-750),indices = c(3,6,8,11))
+set.row(lprec,9,c(1,12,1,-750),indices = c(3,6,7,11))
+rhs<-rep(c(420,360,300),3)
+set.rhs(lprec,rhs)
+set.constr.type(lprec,rep(">=",9))
+set.bounds(lprec,lower = c(-Inf,-Inf),columns = 10:11)
+solve(lprec)
+get.objective(lprec)
+get.constraints(lprec)
+get.variables(lprec)
+get.sensitivity.obj(lprec)
+get.sensitivity.rhs(lprec)
+
+
+
+```
+
